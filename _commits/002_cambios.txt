@@ -1,0 +1,5 @@
+Correccion: error al arrancar "Connection string keyword 'default timeout' is not supported"
+
+JacuzziServer/Data/Db.cs
+  Se elimina "Default Timeout" de la cadena de conexion (no soportado en Microsoft.Data.Sqlite 5.x)
+  y se aplica el timeout con conn.DefaultTimeout (propiedad equivalente en 5.x). Mismo comportamiento: 5 s.

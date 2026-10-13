@@ -1,0 +1,43 @@
+Migracion del servidor del jacuzzi de FastAPI (Python) a ASP.NET 5 (VS 2019) + servicio de Windows
+
+Archivos (todos nuevos):
+
+JacuzziServer/JacuzziServer.csproj
+  Proyecto net5.0. Paquetes: Microsoft.Data.Sqlite 5.0.17 y Microsoft.Extensions.Hosting.WindowsServices 5.0.1.
+JacuzziServer/Program.cs
+  Punto de entrada; UseWindowsService() para funcionar como consola o como servicio.
+JacuzziServer/Startup.cs
+  Registro de servicios (opciones, Db, filtro de clave), errores de validacion como 422 y pipeline (panel estatico + API).
+JacuzziServer/appsettings.json
+  Urls (0.0.0.0:8000), ApiKey, DbPath, ventanas por defecto (2 dias / 12 h) y tope de 3000 filas.
+JacuzziServer/Models/JacuzziOptions.cs
+  Opciones enlazadas a la seccion "Jacuzzi".
+JacuzziServer/Models/SampleIn.cs
+  Modelo de POST /api/data (ts, t1, t2, flags).
+JacuzziServer/Models/DiagSampleIn.cs
+  Modelo de POST /api/diag (16 campos, camelCase).
+JacuzziServer/Data/Db.cs
+  Acceso generico y reutilizable a SQLite (WAL, Execute, Query con parametros @p0..).
+JacuzziServer/Data/JacuzziSchema.cs
+  Esquema identico al original (samples, diag_samples, idx_diag_ts) y lista de tablas del panel.
+JacuzziServer/Data/EpochClock.cs
+  Utilidad reutilizable de epoch en segundos.
+JacuzziServer/Filters/ApiKeyFilter.cs
+  Comprobacion de X-API-Key (401 con {"detail": ...}).
+JacuzziServer/Controllers/DataController.cs
+  /api/data, /api/history, /api/history/agregado, /api/history/deleteday, /api/history/format.
+JacuzziServer/Controllers/DiagController.cs
+  /api/diag (POST, GET) y /api/diag/clear.
+JacuzziServer/Controllers/AdminController.cs
+  /api/schema, /api/table/{tabla}, /api/health.
+JacuzziServer/wwwroot/index.html
+  Panel web copiado tal cual del main.py original.
+JacuzziServer/iniciar_servicio.bat
+  Autoelevacion; comprueba .exe y puerto; crea el servicio con inicio automatico, reinicio ante fallos y lo arranca.
+JacuzziServer/detener_servicio.bat
+  Autoelevacion; detiene el servicio y lo elimina (quita el autoarranque con Windows).
+
+Notas:
+- Copia tu jacuzzi.db actual junto al .exe para conservar el historico.
+- Cambia ApiKey en appsettings.json (misma clave que REMOTE_LOG_API_KEY del ESP32).
+- Publicar: dotnet publish -c Release -r win-x64 --self-contained false -o publish ; copiar los .bat a esa carpeta.

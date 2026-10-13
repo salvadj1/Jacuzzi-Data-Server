@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_PublishTargetUrl>X:\Jacuzzi Server</_PublishTargetUrl>
+    <History>True|2026-10-13T00:15:21.8251373Z;True|2026-10-13T02:01:35.9555178+02:00;True|2026-10-13T01:52:12.4300620+02:00;True|2026-10-13T01:46:27.5136788+02:00;</History>
+  </PropertyGroup>
+</Project>

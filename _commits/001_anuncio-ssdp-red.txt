@@ -1,0 +1,21 @@
+Anuncio SSDP/UPnP: el servidor aparece en Explorador de Windows -> Red
+
+JacuzziServer/Models/SsdpOptions.cs (nuevo)
+  Opciones del anuncio (Enabled, FriendlyName, Port, DeviceType), seccion "Ssdp" de appsettings.json.
+JacuzziServer/Network/LocalNetwork.cs (nuevo)
+  Utilidad reutilizable: IPv4 locales con mascara, eleccion de la IP de la misma subred que el cliente.
+JacuzziServer/Network/SsdpAnnouncer.cs (nuevo)
+  Servicio en segundo plano: escucha M-SEARCH en UDP 1900 y envia NOTIFY alive (cada 5 min) y byebye al parar.
+  Si no puede abrir el puerto, avisa en el log y el servidor sigue funcionando.
+JacuzziServer/Controllers/DeviceController.cs (nuevo)
+  GET /device.xml con la descripcion UPnP (nombre, UDN estable, presentationURL hacia el panel).
+JacuzziServer/Startup.cs
+  Registra SsdpOptions y el servicio SsdpAnnouncer.
+JacuzziServer/appsettings.json
+  Nueva seccion "Ssdp" (Port debe coincidir con "Urls").
+JacuzziServer/iniciar_servicio.bat
+  Crea las reglas de firewall: UDP 1900 (SSDP) y TCP del puerto del servidor (perfiles privado y dominio).
+JacuzziServer/detener_servicio.bat
+  Elimina esas reglas al desinstalar el servicio.
+
+Nota: cada PC necesita la deteccion de redes activada y la red en perfil Privado.
